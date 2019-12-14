@@ -1,0 +1,15 @@
+export const USER_DATA_RECEIVED = "USER_DATA_RECEIVED";
+export const LOGIN_FAILED = "LOGIN_FAILED";
+export const LOG_OUT = "LOG_OUT";
+export const ADD_CART = "ADD_CART";
+export const REMOVE_CART = "REMOVE_CART";
+export const CART_CHANGE_QUANTITY = "CART_CHANGE_QUANTITY";
+export const CLEAR_MESSAGES = "CLEAR_MESSAGES";
+export const UPDATE_ITEM_QUANTITY = "UPDATE_ITEM_QUANTITY";
+export const CLEAR_CART = "CLEAR_CART";
+export const REMOVE_ADDON = "REMOVE_ADDON";
+export const CASH_ON_DELIVERY = "cash_on_delivery";
+export const DEBIT_CARD = "debit_card";
+export const USER_DATA_UPDATE = "USER_DATA_UPDATE";
+export const API_URL = "https://api.starterpackgh.com/api";
+export const REGISTRATION_FAILED = "REGISTRATION_FAILED";

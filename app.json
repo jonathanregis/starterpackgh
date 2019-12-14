@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Starter Pack",
+    "slug": "starterpack",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "primaryColor": "#ffffff",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.starterpack.order"
+    },
+    "androidNavigationBar": {
+     
+    "visible": true,
+
+    "barStyle": "dark-content",
+
+    "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "package": "com.starterpack.order"
+    },
+    "androidStatusBar": {
+    "barStyle": "dark-content",
+    "backgroundColor": "#ffffff"
+  }
+  }
+}
