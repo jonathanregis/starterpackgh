@@ -55,6 +55,8 @@ class CheckoutScreen extends Component {
     } else {
       this._getLocationAsync();
     }
+
+    store.dispatch({type: "TEST_CARDS"});
   }
 
   componentWillUnmount() {

@@ -30,7 +30,7 @@ import {login, clearMessages} from '../actions/AuthActions';
               <Text style={{color: "#334", fontWeight: "bold", fontSize: 26, marginTop: 10}}>Welcome.</Text>
               <Text note>Please login to continue</Text>
               {this.props.loginError && (
-                <Text style={{marginTop: 10, color: "crimson"}}>Incorrect email or password.</Text>
+                <Text style={{marginTop: 10, color: "crimson"}}>Incorrect credentials.</Text>
               )}
             </View>
             <Form style={{marginTop: 30}}>
