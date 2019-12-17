@@ -58,7 +58,6 @@ export function register(data,callback,errorcallback = ()=>{return null}){
 				callback();
 			}
 			else{
-				console.log(response);
 				dispatch({type: REGISTRATION_FAILED, payload: response.message});
 				
 				errorcallback();
@@ -68,7 +67,6 @@ export function register(data,callback,errorcallback = ()=>{return null}){
 }
 
 export function updateUserInfo(data){
-	console.log(data)
 	return dispatch => {
 		fetch(API_URL + "/buyers/"+data.id,{
 			method: "PATCH",
@@ -89,7 +87,6 @@ export function updateUserInfo(data){
 			}
 			else {
 				ToastAndroid.show("Could not update info",ToastAndroid.SHORT);
-				console.log(response)
 			}
 		})
 	}
