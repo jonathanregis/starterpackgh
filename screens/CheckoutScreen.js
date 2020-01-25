@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Constants from 'expo-constants';
+import { WebView, ActivityIndicator } from 'react-native';
 import {StatusBar, StyleSheet, View, TouchableOpacity, Platform, BackHandler, Modal} from 'react-native';
-import { Container, ActionSheet, Thumbnail, List, ListItem, Form, Item, Label, Input, Textarea, Content, Title, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Text, Footer, Left, Body, Right, Button } from 'native-base';
+import { Container, ActionSheet, Thumbnail, List, ListItem, Form, Item, Label, Input, Textarea, Content, Title, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Text, Footer, Left, Body, Right, Button, Spinner } from 'native-base';
 import Colors from '../constants/Colors';
 import {Feather} from '@expo/vector-icons';
 import * as Location from 'expo-location';
@@ -30,7 +31,7 @@ class CheckoutScreen extends Component {
       location: {},
       address: this.props.user.address,
       editMode: false,
-      paymentMethod: "",
+      paymentMethod: "CARD",
       selectedCard: 0,
       modalVisible: false,
       useGps: this.props.user.address != "" ? false : true,
@@ -38,6 +39,8 @@ class CheckoutScreen extends Component {
       contactNumber: this.props.user.phone,
       note: "",
       orderNumber: "",
+      checkoutURL: "",
+      spin: false
     };
   }
 
@@ -55,8 +58,6 @@ class CheckoutScreen extends Component {
     } else {
       this._getLocationAsync();
     }
-
-    store.dispatch({type: "TEST_CARDS"});
   }
 
   componentWillUnmount() {
@@ -107,7 +108,8 @@ class CheckoutScreen extends Component {
         payment: {
           method: this.state.paymentMethod,
           amount: this.props.total + 10
-        }
+        },
+        redirectURL: "https://starterpackgh.com/paid/"
       }
       fetch(API_URL+"/pay/",{
         method: "POST",
@@ -119,7 +121,8 @@ class CheckoutScreen extends Component {
       })
       .then(response=>response.json())
       .then(res=>{
-        if(res.success) this.setState({orderNumber:res.order.orderID},this.setState({modalVisible: true}));
+      	console.log(res);
+        if(res.success) this.setState({orderNumber:res.payment['order-id'],checkoutURL: res.payment.checkoutUrl},this.setState({modalVisible: true}));
         else alert("Delivery failed, please try again");
       })
     }
@@ -143,6 +146,25 @@ class CheckoutScreen extends Component {
         this.setState({ selectedCard: buttonIndex });
       })
   }
+
+  showLoader = () => {
+  	this.setState({spin: true})
+  }
+
+  hideLoader = () => {
+  	this.setState({spin: false})
+  }
+
+  renderLoadingView() {
+	return (
+	    <ActivityIndicator
+	       color = '#bc2b78'
+	       size = "large"
+	       style = {styles.activityIndicator}
+	       hidesWhenStopped={true} 
+	    />
+	);
+	}
 
   render() {
     return (
@@ -174,22 +196,19 @@ class CheckoutScreen extends Component {
               containerStyle={styles.modal}
               >
               <View style={styles.modal}>
-                <View style={styles.modalContent}>
-                  <Feather name="check-circle" color="seagreen" size={100} />
-                  <Title style={{color: "#334", fontSize: 30, marginVertical: 15}}>Thank you!</Title>
-                  <Text style={{marginBottom: 15}}>Your <Text style={{fontWeight: "bold"}}>order number {this.state.orderNumber}</Text> has been received. We will contact you in a minute.</Text>
-                  <Text note>Delivery will take approximately 45 mins.</Text>
-                  <Button
-                    onPress={() => {
-                      this.setModalVisible(false);
-                      this.props.navigation.navigate("Cart",{redir: "Home"});
-                      this.setState({payButton: false});
-                      store.dispatch({type: "CLEAR_CART"});
-                    }} style={styles.modalButton}>
-
-                    <Text>Close</Text>
-                  </Button>
-                </View>
+                <WebView 
+                	onMessage={event => {
+					    const { data } = event.nativeEvent;
+					    if(data == "done") {
+					    	this.setModalVisible(false);
+			                this.props.navigation.navigate("Home");
+			                this.setState({payButton: false});
+			                store.dispatch({type: "CLEAR_CART"});
+					    }
+				  	}} 
+				  	startInLoadingState={true} 
+				  	style={styles.modalContent} 
+				  	source={{ uri: this.state.checkoutURL }} />
               </View>
             </Modal>
         <Content enableOnAndroid style={{backgroundColor: "#fff"}}>
@@ -230,20 +249,7 @@ class CheckoutScreen extends Component {
           <Tab disabled={true} textStyle={{color: "#fff"}} activeTabStyle={{margin: 10,borderColor: "#fff", borderWidth: 1, backgroundColor: "transparent", borderRadius: 30}} activeTextStyle={{color: "#fff", fontWeight: 'bold'}} tabStyle={{backgroundColor: "transparent", borderWidth: 1, borderColor: "transparent", elevation: 0, borderRadius: 30, margin:10}} heading="Payment">
             <View style={{ backgroundColor: "#334"}}>
               <View style={{padding: 15,backgroundColor: "#fff", borderTopRightRadius: 30, borderTopLeftRadius: 30, elevation: 0, flex: 1, justifyContent: "center"}}>
-                <Text style={styles.sectionTitle}>PAYMENT METHOD</Text>
-                <View style={{flexDirection: "row", marginBottom: 15}} >
-                  <TouchableOpacity onPress={()=>this.setState({paymentMethod: DEBIT_CARD,payButton: this.state.tabNum  == 1})} style={{flexDirection: "row"}}>
-                    <RadioButton selected={this.state.paymentMethod == DEBIT_CARD} />
-                    <Text style={{marginLeft: 5}}>Debit card</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={()=>this.setState({paymentMethod: CASH_ON_DELIVERY,payButton: this.state.tabNum  == 1})} style={{flexDirection: "row", marginLeft: 15}}>
-                    <RadioButton selected={this.state.paymentMethod == CASH_ON_DELIVERY} />
-                    <Text style={{marginLeft: 5}}>Cash on delivery</Text>
-                  </TouchableOpacity>
-                </View>
-                {this.state.paymentMethod == DEBIT_CARD && (
-                  <DebitCardsList single={this.state.selectedCard} changeAction={this.changeCard} />
-                )}
+                
                 <Text style={[styles.sectionTitle,{marginTop: 15}]}>ORDER SUMMARY</Text>
                 <List>
                 {this.props.cartItems.map((item, index)=>{
@@ -287,6 +293,8 @@ class CheckoutScreen extends Component {
     );
   }
 }
+
+
 
 CheckoutScreen.navigationOptions = {
   header: null
@@ -345,6 +353,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: '100%',
     marginTop: 30
+  },
+  activityIndicator: {
+  	flex: 1,
+  	alignSelf: "center"
   }
 })
 

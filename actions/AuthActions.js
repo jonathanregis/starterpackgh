@@ -29,7 +29,7 @@ export function login(credentials,callback,errorcallback = ()=>{return null}){
 				callback();
 			}
 			else{
-				
+				console.log(response)
 				dispatch({
 					type: LOGIN_FAILED
 				});
@@ -58,6 +58,8 @@ export function register(data,callback,errorcallback = ()=>{return null}){
 				callback();
 			}
 			else{
+				console.log(response);
+				console.log(data);
 				dispatch({type: REGISTRATION_FAILED, payload: response.message});
 				
 				errorcallback();

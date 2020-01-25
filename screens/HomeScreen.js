@@ -128,8 +128,12 @@ import {API_URL} from '../constants/Redux';
         style={styles.contentSection}
         >
         <View>
-          <Text style={styles.sectionTitle}>WE RECOMMEND</Text>
-          <RecommendedSlider entries={this.state.entries} navigation={this.props.navigation} />
+
+          <Text style={styles.sectionTitle}>MAKE YOUR BREAKFAST</Text>
+          <Text note>You can make your own breakfast pack by choosing different items provided.</Text>
+          <Button onPress={()=>this.props.navigation.navigate("Builder")} style={{backgroundColor: Colors.tintColor,borderRadius: 30, marginTop: 20}}>
+            <Text>Get started</Text>
+          </Button>
 
           <View style={styles.sectionTitleWithLink}>
             <Text style={styles.sectionTitle}>WHAT'S ON THE MENU</Text>
@@ -139,11 +143,6 @@ import {API_URL} from '../constants/Redux';
           </View>
           <StarterPackMenu navigation={this.props.navigation} entries={this.state.menuEntries} limit={5} />
 
-          <Text style={styles.sectionTitle}>MAKE YOUR OWN</Text>
-          <Text note style={{marginBottom: 20}}>You can make your own breakfast pack by choosing different items provided.</Text>
-          <Button onPress={()=>this.props.navigation.navigate("Builder")} style={{backgroundColor: Colors.tintColor,borderRadius: 30}}>
-            <Text>Get started</Text>
-          </Button>
         </View>
       </View>
     </Content>

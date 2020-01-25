@@ -9,7 +9,8 @@ import update from 'immutability-helper';
 
 const initialState = {
 	user: {name: "", phone: "", email: "", address: "", id: ""},
-	token: ""
+	token: "",
+	isNew: true
 }
 
 export default function(state = initialState, action){
@@ -23,7 +24,8 @@ export default function(state = initialState, action){
 					address: {$set: action.payload.address},
 					id: {$set: action.payload.id}
 				},
-				token: {$set: action.payload.userToken}
+				token: {$set: action.payload.userToken},
+				isNew: {$set: true}
 			});
 
 		case LOG_OUT:
@@ -35,6 +37,11 @@ export default function(state = initialState, action){
 			return update(state, {
 				user: {$merge: action.payload}
 			});
+
+		case "PASS_WELCOME":
+			return update(state,{
+				isNew: {$set: false}
+			})
 
 		default:
 			return state;

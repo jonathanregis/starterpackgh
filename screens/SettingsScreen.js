@@ -94,39 +94,6 @@ class SettingsScreen extends Component {
                 <Input disabled={!this.state.editMode} defaultValue={this.props.user.address} style={{fontSize: 14}} onChangeText={(t)=>{this.setState({updateUserInfo: {...this.state.updateUserInfo, address: t}})}}/>
               </Item>
             </Form>
-            <ListItem
-              hideChevron
-              containerStyle={styles.listItemContainer}
-              icon
-              first
-              last
-            >
-            <Left>
-              <Icon type="Feather" name="lock" color="#334" style={{height: 32, width: 32}} />
-              </Left>
-              <Body><Text>Reset password</Text></Body>
-              <Right>
-                <Icon type="Feather" name="chevron-right" color="#dedeea"/>
-              </Right>
-            </ListItem>
-            <ListItem
-              hideChevron
-              containerStyle={styles.listItemContainer}
-              icon
-              first
-              last
-            >
-            <Left>
-              <Icon type="Feather" name="bell" color="#334" style={{height: 32, width: 32}} />
-              </Left>
-              <Body><Text>Push Nottifications</Text></Body>
-              <Right>
-                <Switch
-                  onValueChange={this.onChangePushNotifications}
-                  value={this.state.pushNotifications}
-                />
-              </Right>
-            </ListItem>
           </View>
           <InfoText text="More" />
           <View>
