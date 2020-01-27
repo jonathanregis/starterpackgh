@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import {Input, Text, Form, Item, Label, Container, Content, Header, Left, Right, Body, Button, Icon, Spinner} from 'native-base';
 import {connect} from 'react-redux';
 import {login, clearMessages} from '../actions/AuthActions';
+import { Linking } from 'expo';
 
  class SignInScreen extends React.Component {
 
@@ -40,7 +41,7 @@ import {login, clearMessages} from '../actions/AuthActions';
                 <Icon name="person" />
               </Item>
               <Item style={styles.fieldItem}>
-                <Label>Password</Label>
+                <Label>Pin/Password</Label>
                 <Input secureTextEntry={true} onChangeText={(t)=>{this.setState({password: t})}}/>
                 <Icon name="lock" />
               </Item>
@@ -57,8 +58,8 @@ import {login, clearMessages} from '../actions/AuthActions';
                 <Icon name="log-in" />
               )}
             </Button>
-            <Text note style={{marginTop: 40,alignSelf: "center"}}>New user? <Text style={{color: "deepskyblue"}} note onPress={()=>this.props.navigation.navigate('SignUp')}>Signup</Text></Text>
-            <Text note style={{marginTop: 30}}>By signing in, you agree to our term our terms and condition that as documented <Text style={{color: "deepskyblue"}}>here</Text>. Please also read our <Text style={{color: "deepskyblue"}}>privacy policy</Text></Text>
+            <Text note style={{marginTop: 40,alignSelf: "center"}}>New user? <Text style={{color: "deepskyblue", fontSize: 21}} note onPress={()=>this.props.navigation.navigate('SignUp')}>Signup</Text></Text>
+            <Text note style={{marginTop: 30}}>By signing in, you agree to our <Text onPress={()=>Linking.openURL("https://starterpackgh.com/tc")} note style={{color: "deepskyblue"}}>Terms and Conditions.</Text> Please also read our <Text onPress={()=>Linking.openURL("https://starterpackgh.com/privacy-policy")} note style={{color: "deepskyblue"}}>privacy policy</Text></Text>
         </Content>
       </Container>
     );

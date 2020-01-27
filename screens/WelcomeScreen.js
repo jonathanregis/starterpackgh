@@ -35,10 +35,10 @@ import store from '../store';
               <Image source={require('../assets/images/starterpack.png')} style={{width: 150, height: 150,alignSelf: "center"}} resizeMode="contain" />
               <Text style={{alignSelf: "center", color: Colors.tintColor, fontWeight: "bold", fontSize: 26, marginTop: 10}}>WELCOME</Text>
             </View>
-            <Button onPress={()=>{this.props.navigation.navigate("SignIn");store.dispatch({type: "PASS_WELCOME"})}} style={styles.loginButton}>
+            <Button onPress={()=>{store.dispatch({type: "PASS_WELCOME"});this.props.navigation.navigate("SignIn")}} style={styles.loginButton}>
               <Text>Let's Get Started</Text>
             </Button>
-            <Button onPress={()=>{this.props.navigation.navigate("SignUp");store.dispatch({type: "PASS_WELCOME"})}} style={styles.registerButton} bordered transparent noShadow>
+            <Button onPress={()=>{store.dispatch({type: "PASS_WELCOME"});this.props.navigation.navigate("SignUp")}} style={styles.registerButton} bordered transparent noShadow>
               <Text style={{color: Colors.tintColor}}>Register Now</Text>
             </Button>
         </Content>

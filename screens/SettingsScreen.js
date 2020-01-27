@@ -11,6 +11,8 @@ import Constants from 'expo-constants';
 
 import {updateUserInfo} from '../actions/AuthActions';
 import Colors from '../constants/Colors';
+import {Linking} from 'expo';
+
 
 
 class SettingsScreen extends Component {
@@ -77,7 +79,7 @@ class SettingsScreen extends Component {
               <Text style={{color: Colors.tintColor}}>{this.state.editMode ? "SAVE" : "EDIT"}</Text>
             </TouchableOpacity>
             <Form style={{marginTop: 20}} noIndent>
-              <Item style={styles.fieldItem} noIndent>
+              <Item style={styles.fieldItem} noIndent first>
                 <Label style={{fontSize: 14}} >Name</Label>
                 <Input disabled={!this.state.editMode} defaultValue={this.props.user.name} style={{fontSize: 14}} onChangeText={(t)=>{this.setState({updateUserInfo: {...this.state.updateUserInfo, name: t}})}} />
               </Item>
@@ -89,7 +91,7 @@ class SettingsScreen extends Component {
                 <Label style={{fontSize: 14}} >Phone</Label>
                 <Input disabled={!this.state.editMode} defaultValue={this.props.user.phone} keyboardType="phone-pad" style={{fontSize: 14}} onChangeText={(t)=>{this.setState({updateUserInfo: {...this.state.updateUserInfo, phone: t}})}} />
               </Item>
-              <Item style={styles.fieldItem} noIndent>
+              <Item style={styles.fieldItem} noIndent last>
                 <Label style={{fontSize: 14}} >Address</Label>
                 <Input disabled={!this.state.editMode} defaultValue={this.props.user.address} style={{fontSize: 14}} onChangeText={(t)=>{this.setState({updateUserInfo: {...this.state.updateUserInfo, address: t}})}}/>
               </Item>
@@ -98,7 +100,7 @@ class SettingsScreen extends Component {
           <InfoText text="More" />
           <View>
             <ListItem
-              onPress={() => this.onPressOptions()}
+              onPress={() => Linking.openURL("https://starterpackgh.com/about")}
               containerStyle={styles.listItemContainer}
               icon
               first
@@ -110,13 +112,24 @@ class SettingsScreen extends Component {
               </Right>
             </ListItem>
             <ListItem
-              onPress={() => this.onPressOptions()}
+              onPress={() => Linking.openURL("https://starterpackgh.com/tc")}
+              containerStyle={styles.listItemContainer}
+              icon
+            >
+              <Left><Icon type="Feather" name="edit" color="#334" style={{height: 32, width: 32}} /></Left>
+              <Body><Text>Terms and Conditions</Text></Body>
+              <Right>
+                <Icon type="Feather" name="chevron-right" color="#dedeea"/>
+              </Right>
+            </ListItem>
+            <ListItem
+              onPress={() => Linking.openURL("https://starterpackgh.com/privacy-policy")}
               containerStyle={styles.listItemContainer}
               icon
               last
             >
-              <Left><Icon type="Feather" name="edit" color="#334" style={{height: 32, width: 32}} /></Left>
-              <Body><Text>Terms and Policies</Text></Body>
+              <Left><Icon type="Feather" name="lock" color="#334" style={{height: 32, width: 32}} /></Left>
+              <Body><Text>Privacy Policy</Text></Body>
               <Right>
                 <Icon type="Feather" name="chevron-right" color="#dedeea"/>
               </Right>

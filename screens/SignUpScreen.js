@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import {Input, Text, Form, Item, Label, Container, Content, Header, Left, Right, Body, Button, Icon, Spinner} from 'native-base';
 import {connect} from 'react-redux';
 import {register,login} from '../actions/AuthActions';
+import {Linking} from 'expo';
 
 class SignUpScreen extends React.Component {
 
@@ -75,7 +76,7 @@ class SignUpScreen extends React.Component {
                 <Input error={'#d50000'} keyboardType="phone-pad" onChangeText={(n)=>this.setState({phone: n})}/>
               </Item>
               <Item style={styles.fieldItem} error={this.hasError("password")} >
-                <Label>Password</Label>
+                <Label>Pin/Password</Label>
                 <Input error={'#d50000'} secureTextEntry={true} onChangeText={(n)=>this.setState({password: n})}/>
               </Item>
               <Item style={styles.fieldItem} error={this.hasError("passwordConfirm")}>
@@ -94,7 +95,7 @@ class SignUpScreen extends React.Component {
                 <Icon name="log-in"/>
               )}
             </Button>
-            <Text note style={{marginTop: 30}}>By signing up, you agree to our term our terms and condition that as documented <Text note style={{color: "deepskyblue"}}>here</Text>. Please also read our <Text note style={{color: "deepskyblue"}}>privacy policy</Text></Text>
+            <Text note style={{marginTop: 30}}>By signing up, you agree to our <Text onPress={()=>Linking.openURL("https://starterpackgh.com/tc")} note style={{color: "deepskyblue"}}>Terms and Conditions.</Text> Please also read our <Text note onPress={()=>Linking.openURL("https://starterpackgh.com/privacy-policy")} style={{color: "deepskyblue"}}>Privacy Policy</Text></Text>
         </Content>
       </Container>
     );

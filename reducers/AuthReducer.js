@@ -25,7 +25,6 @@ export default function(state = initialState, action){
 					id: {$set: action.payload.id}
 				},
 				token: {$set: action.payload.userToken},
-				isNew: {$set: true}
 			});
 
 		case LOG_OUT:

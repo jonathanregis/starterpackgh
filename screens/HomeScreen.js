@@ -132,11 +132,11 @@ import {API_URL} from '../constants/Redux';
           <Text style={styles.sectionTitle}>MAKE YOUR BREAKFAST</Text>
           <Text note>You can make your own breakfast pack by choosing different items provided.</Text>
           <Button onPress={()=>this.props.navigation.navigate("Builder")} style={{backgroundColor: Colors.tintColor,borderRadius: 30, marginTop: 20}}>
-            <Text>Get started</Text>
+            <Text>Make your breakfast</Text>
           </Button>
 
           <View style={styles.sectionTitleWithLink}>
-            <Text style={styles.sectionTitle}>WHAT'S ON THE MENU</Text>
+            <Text style={styles.sectionTitle}>FULLY LOADED MENU</Text>
             <TouchableOpacity onPress={()=>this.props.navigation.navigate("Menu")}>
               <Text style={{color: Colors.tintColor}}>VIEW ALL <Feather size={15} name="chevron-right" color={Colors.tintColor} /></Text>
             </TouchableOpacity>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     position: 'absolute',
-    height: 240,
+    height: 210,
     width: '100%',
     display: 'flex',
     alignItems: 'center',
