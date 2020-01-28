@@ -121,7 +121,6 @@ class CheckoutScreen extends Component {
       })
       .then(response=>response.json())
       .then(res=>{
-      	console.log(res);
         if(res.success) this.setState({orderNumber:res.payment['order-id'],checkoutURL: res.payment.checkoutUrl},this.setState({modalVisible: true}));
         else alert("Delivery failed, please try again");
       })
@@ -129,22 +128,6 @@ class CheckoutScreen extends Component {
   }
   setModalVisible(visible){
     this.setState({modalVisible: visible});
-  }
-  changeCard = (e) => {
-    var cards = [];
-    e.map((c,i)=>cards.push("Card ending "+c.number.slice(-4)))
-    var buttons = [...cards,"Cancel"];
-    var cancelIndex = buttons.length - 1;
-    ActionSheet.show(
-      {
-        options: buttons,
-        cancelButtonIndex: cancelIndex,
-        title: "Choose card"
-      },
-      buttonIndex => {
-        if(buttons[buttonIndex] == "Cancel") return null;
-        this.setState({ selectedCard: buttonIndex });
-      })
   }
 
   showLoader = () => {
