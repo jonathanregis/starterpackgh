@@ -107,7 +107,7 @@ class CheckoutScreen extends Component {
         },
         payment: {
           method: this.state.paymentMethod,
-          amount: this.props.total + 10
+          amount: this.props.total
         },
         redirectURL: "https://starterpackgh.netlify.com/paid/"
       }
@@ -255,9 +255,7 @@ class CheckoutScreen extends Component {
                 <View style={styles.sectionTitleWithLink}>
                   <Text style={styles.sectionTitle}>TOTAL</Text>
                   <View>
-                    <Text note>incl. VAT 17.5%</Text>
-                    <Text note>delivery: GHC 10</Text>
-                    <Text>GHC {this.props.total + 10}</Text>
+                    <Text>GHC {this.props.total}</Text>
                   </View>
                 </View>
               </View>
