@@ -109,7 +109,7 @@ class CheckoutScreen extends Component {
           method: this.state.paymentMethod,
           amount: this.props.total + 10
         },
-        redirectURL: "https://starterpackgh.com/paid/"
+        redirectURL: "https://starterpackgh.netlify.com/paid/"
       }
       fetch(API_URL+"/pay/",{
         method: "POST",
