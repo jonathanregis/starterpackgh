@@ -58,7 +58,7 @@ import {API_URL} from '../constants/Redux';
 
   render(){
     if(this.props.isFocused){
-      StatusBar.setBarStyle("dark-content")
+      StatusBar.setBarStyle("light-content")
       StatusBar.setBackgroundColor(this.state.headerBgColor)
     }
     return (
@@ -66,13 +66,13 @@ import {API_URL} from '../constants/Redux';
     <Container>
     {this.state.searchActive && (
       <Header noShadow style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, marginTop: Constants.statusBarHeight}} searchBar rounded>
-        <StatusBar barStyle="dark-content" backgroundColor={this.state.headerBgColor} translucent={true}/>
+        <StatusBar barStyle="light-content" backgroundColor={this.state.headerBgColor} translucent={true}/>
         <Left>
           <Button transparent onPress={()=>this.setState({searchActive: false})}>
-            <Feather name="x-circle" size={30} color={Colors.tintColor} />
+            <Feather name="x-circle" size={30} color="#fff" />
           </Button>
         </Left>
-        <Item style={{borderRadius: 30, backgroundColor: "#ffffff88"}}>
+        <Item style={{borderRadius: 30, backgroundColor: "#ffffffcc"}}>
           <Input returnKeyType="search" placeholder="Search" onChangeText={(x) => this.setState({searchTerm: x})} onSubmitEditing={()=>this.props.navigation.navigate("Menu",{term: this.state.searchTerm})}
   clearButtonMode="while-editing" />
           <Icon name="search" onPress={()=>this.props.navigation.navigate("Menu",{term: this.state.searchTerm})} />
@@ -83,20 +83,20 @@ import {API_URL} from '../constants/Redux';
 
     {!this.state.searchActive && (
       <Header noShadow style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, marginTop: Constants.statusBarHeight}} >
-        <StatusBar barStyle="dark-content" backgroundColor={this.state.headerBgColor} translucent={true}/>
+        <StatusBar barStyle="light-content" backgroundColor={this.state.headerBgColor} translucent={true}/>
         <Left>
           <Button onPress={()=>this.openDrawer()} transparent>
-            <Feather name="bar-chart-2" size={30} color={Colors.tintColor} style={{transform: [{ rotate: "90deg" }]}}/>
+            <Feather name="bar-chart-2" size={30} color="#fff" style={{transform: [{ rotate: "90deg" }]}}/>
           </Button>
         </Left>
 
           <Body>
-            <Title style={{color: Colors.tintColor, fontWeight: "bold", fontSize: 18}}>STARTERPACK</Title>
+            <Title style={{color: "#fff", fontWeight: "bold", fontSize: 18}}>STARTERPACK</Title>
           </Body>
 
           <Right>
             <Button transparent onPress={()=>this.setState({searchActive: true})}>
-              <Feather name="search" size={30} color={Colors.tintColor} />
+              <Feather name="search" size={30} color="#fff" />
             </Button>
           </Right>
         
@@ -109,7 +109,7 @@ import {API_URL} from '../constants/Redux';
         <Image
           style={styles.imgHeader}
           resizeMode='contain'
-          source={require('../assets/images/3036847.jpg')}
+          source={require('../assets/images/banner.png')}
         />
     </View>
     <Content style={styles.mainSection} onScroll={({ nativeEvent }) => {

@@ -10,7 +10,7 @@
       "web"
     ],
     "primaryColor": "#ffffff",
-    "version": "1.0.2",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -27,7 +27,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.starterpack.order",
-      "buildNumber": "1.1"
+      "buildNumber": "10"
     },
     "androidNavigationBar": {
      
@@ -39,10 +39,10 @@
     },
     "android": {
       "package": "com.starterpack.order",
-      "versionCode": "1.1"
+      "versionCode": 10
     },
     "androidStatusBar": {
-    "barStyle": "dark-content",
+    "barStyle": "light-content",
     "backgroundColor": "#ffffff"
   }
   }

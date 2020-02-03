@@ -9,7 +9,6 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import {RadioButton} from '../components/Addons';
 import {CASH_ON_DELIVERY, DEBIT_CARD, API_URL} from '../constants/Redux';
-import DebitCardsList from '../components/DebitCardsList';
 import {connect} from 'react-redux';
 import store from '../store';
 import {withNavigationFocus} from 'react-navigation'
