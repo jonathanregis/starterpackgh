@@ -114,7 +114,7 @@ import {API_URL} from '../constants/Redux';
     </View>
     <Content style={styles.mainSection} onScroll={({ nativeEvent }) => {
             if (this.isCloseToTop(nativeEvent)) {
-              this.setState({headerBgColor: "#eee0cb"})
+              this.setState({headerBgColor: "#334"})
             }
             else {
               this.setState({headerBgColor: "transparent"})

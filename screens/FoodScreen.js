@@ -80,9 +80,9 @@ class FoodScreen extends React.Component {
     
     <View style={styles.headerSection}>
         <Image
-          resizeMode='contain'
+          resizeMode='cover'
           source={this.state.image}
-          style={{width: "100%", height: 1600, resizeMode: "contain"}} //food.bg ? {width: 250,height: 250, backgroundColor: food.bg} this
+          style={{width: "100%", height: 350, resizeMode: "cover"}} //food.bg ? {width: 250,height: 250, backgroundColor: food.bg} this
         />
     </View>
     <Content style={styles.mainSection}>
@@ -167,13 +167,14 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   headerSection: {
-    position: 'relative',
-    height: 350,
+    position: 'absolute',
+    height: 260,
     width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 0,
+    marginTop: -50
   },
   mainSection: {
     backgroundColor: '#fff',
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     zIndex: 1,
-    marginTop: -50,
+    marginTop: 210,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
