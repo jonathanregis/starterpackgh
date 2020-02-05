@@ -71,9 +71,9 @@ function ShowListFromDate(props){
 		newArr.map((order,i)=>(
 			<ListItem first={i == 0} last={i == newArr.length - 1} key={i} style={{alignItems: "flex-start", justifyContent: "flex-start"}}>
 				<Left style={{flex:1, flexDirection: "column",alignItems: "flex-start",justifyContent:"flex-start"}}>
-					<Title style={{color: "#334"}}>#{order._id.split("/")[0]}</Title>
+					<Title style={{color: "#334"}}>#{order.orderID}</Title>
 					<Text note numberOfLines={1} style={{justifyContent: "flex-start", alignSelf: "flex-start", textAlign: "left"}}>{order.delivery.destination}</Text>
-					<View note style={{marginTop: 5, flexDirection: "row", justifyContent: "flex-start",alignItems: "flex-start"}}><Icon name="check-circle" type="Feather" style={{color:"seagreen"}} /><Text note> Successful</Text></View>
+					<View note style={{marginTop: 5, flexDirection: "row", justifyContent: "flex-start",alignItems: "flex-start"}}><Icon name={order.status.result == 1 ? "check-circle" : "x-circle"} type="Feather" style={{color:order.status.result == 1 ? "seagreen" : "crimson"}} /><Text note> {order.status['result-text']}</Text></View>
 				</Left>
 				<Right style={{flex: 1,flexDirection: "column"}}>
 					<Text>GHC {order.payment.amount}</Text>
