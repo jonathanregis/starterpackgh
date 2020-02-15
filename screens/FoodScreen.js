@@ -62,7 +62,7 @@ class FoodScreen extends React.Component {
     return (
     <Container style={{backgroundColor: food.bg ? food.bg : null}} >
 
-      <Header noShadow style={{backgroundColor: 'transparent', zIndex: 1000, elevation:0, marginTop: Constants.statusBarHeight}} >
+      <Header noShadow noBorder style={{backgroundColor: 'transparent', zIndex: 1000, elevation:0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} >
         <StatusBar barStyle={food.statusBarStyle ? food.statusBarStyle : "dark-content"} backgroundColor="transparent" translucent={true}/>
         <Left>
           <Button onPress={()=>this.props.navigation.goBack()} transparent>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View,  StatusBar, TouchableOpacity } from 'react-native';
+import {StyleSheet, View,  StatusBar, TouchableOpacity, Platform } from 'react-native';
 import { Left, Body, Text, Right, Header, Content, Container, Title, Form, Item, Label, Input, Button } from 'native-base';
 import Constants from 'expo-constants';
 import {API_URL} from '../constants/Redux';
@@ -71,7 +71,7 @@ export default class PasswordForgotScreen extends Component {
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: "#fff", elevation: 0, marginTop: Constants.statusBarHeight}} noShadow>
+        <Header style={{backgroundColor: "#fff", elevation: 0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder noShadow>
           <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
           <Left>
             <Button transparent onPress={()=>this.props.navigation.goBack()}>

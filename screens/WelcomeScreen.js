@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,AsyncStorage, StatusBar, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import {View,AsyncStorage, StatusBar, StyleSheet, Image, TouchableHighlight, Platform} from 'react-native';
 import Constants from 'expo-constants';
 import {Feather} from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -24,7 +24,7 @@ import store from '../store';
   render() {
     return (
       <Container style={{flex: 1}}>
-        <Header style={{marginTop: Constants.statusBarHeight}} backgroundColor="#fff" noShadow>
+        <Header style={{borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder backgroundColor="#fff" noShadow>
           <StatusBar barStyle="dark-content" backgroundColor="#fff" translucent/>
           <Left />
           <Body />

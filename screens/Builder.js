@@ -80,7 +80,7 @@ class FoodBuilder extends React.Component {
     return (
     <Container style={{backgroundColor: "#fff"}}>
 
-      <Header hasTabs style={{backgroundColor: '#334', elevation: 0, marginTop: Constants.statusBarHeight}} noShadow>
+      <Header hasTabs style={{backgroundColor: '#334', elevation: 0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noShadow>
         <StatusBar barStyle="light-content" backgroundColor="#334" translucent={true}/>
         <Left >
           <Button transparent onPress={()=>this.props.navigation.goBack() }>

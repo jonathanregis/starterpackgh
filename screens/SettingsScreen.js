@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, StyleSheet, Text, View,  StatusBar, TouchableOpacity } from 'react-native';
+import { Switch, StyleSheet, Text, View,  StatusBar, TouchableOpacity, Platform } from 'react-native';
 import { Thumbnail, ListItem, Left, Body, Right, Icon, Header, Content, Container, Title, Form, Item, Label, Input } from 'native-base';
 import {Feather} from '@expo/vector-icons';
 
@@ -44,7 +44,7 @@ class SettingsScreen extends Component {
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: "#fff", elevation: 0, marginTop: Constants.statusBarHeight}} noShadow>
+        <Header style={{backgroundColor: "#fff", elevation: 0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder noShadow>
           <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
           <Left style={{flex: 1}} />
           <Body style={{flex: 1,alignItems: "center"}} ><Title style={{color: "#334"}} >Settings</Title></Body>

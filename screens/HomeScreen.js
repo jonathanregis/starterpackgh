@@ -58,15 +58,15 @@ import {API_URL} from '../constants/Redux';
 
   render(){
     if(this.props.isFocused){
-      StatusBar.setBarStyle("light-content")
+      StatusBar.setBarStyle(Platform.OS !== "ios" ? "light-content":"dark-content")
       StatusBar.setBackgroundColor(this.state.headerBgColor)
     }
     return (
     <Drawer ref={(ref) => { this.drawer = ref; }} content={<SideBar drawerItem={this.drawer} navigation={this.props.navigation} />} onClose={() => this.closeDrawer()} >
     <Container>
     {this.state.searchActive && (
-      <Header noShadow style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, marginTop: Constants.statusBarHeight}} searchBar rounded>
-        <StatusBar barStyle="light-content" backgroundColor={this.state.headerBgColor} translucent={true}/>
+      <Header noShadow style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder searchBar rounded>
+        <StatusBar barStyle={Platform.OS !== "ios" ? "light-content":"dark-content"} backgroundColor={this.state.headerBgColor} translucent={true}/>
         <Left>
           <Button transparent onPress={()=>this.setState({searchActive: false})}>
             <Feather name="x-circle" size={30} color="#fff" />
@@ -82,7 +82,7 @@ import {API_URL} from '../constants/Redux';
     )}
 
     {!this.state.searchActive && (
-      <Header noShadow style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, marginTop: Constants.statusBarHeight}} >
+      <Header noShadow noBorder style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} >
         <StatusBar barStyle="light-content" backgroundColor={this.state.headerBgColor} translucent={true}/>
         <Left>
           <Button onPress={()=>this.openDrawer()} transparent>

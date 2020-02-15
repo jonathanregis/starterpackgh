@@ -1,6 +1,6 @@
 import React from 'react';
 import {ListItem, List, Left, Body, Right, Container, Content, Header, Button, Icon, Title, Text} from 'native-base';
-import {StatusBar, View} from 'react-native';
+import {StatusBar, View, Platform} from 'react-native';
 import Colors from '../constants/Colors';
 import Constants from 'expo-constants';
 import {Feather} from '@expo/vector-icons';
@@ -14,7 +14,8 @@ class OrderHistoryScreen extends React.Component{
 	  super(props);
 	
 	  this.state = {
-	  	orders: {}
+	  	orders: [],
+	  	done: false
 	  }
 	}
 
@@ -27,13 +28,14 @@ class OrderHistoryScreen extends React.Component{
 			}
 		})
 		.then(response=>response.json())
-		.then(res=>{res.orders.forEach((i,index)=>i.date = i.createdAt.split("T")[0]);this.setState({orders: _.groupBy(res.orders,'date')})})
+		.then(res=>{res.orders.forEach((i,index)=>i.date = i.createdAt.split("T")[0]);this.setState({orders: res.orders},this.setState({done:true}))})
 	}
 
 	render(){
+		const orders = _.groupBy(this.state.orders,'date');
 		return(
 			<Container>
-				<Header style={{backgroundColor: "#fff", marginTop: Constants.statusBarHeight}} noShadow>
+				<Header style={{backgroundColor: "#fff", borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noShadow noBorder>
 					<StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
 					<Left>
 						<Button transparent>
@@ -46,14 +48,17 @@ class OrderHistoryScreen extends React.Component{
 					<Right />
 				</Header>
 				<Content enableOnAndroid>
+				{this.state.done && (
 					<List>
-						{Object.keys(this.state.orders).reverse().map((key,index)=>{return[
+						{Object.keys(orders).reverse().map((key,index)=>{return[
 							<ListItem key={Math.random()+index} itemDivider first>
 								<Text note>{moment(key).calendar(null).split(" at ")[0]}</Text>
 							</ListItem>,
-							<ShowListFromDate key={Math.random()} list={this.state.orders[key]} />
+							<ShowListFromDate key={Math.random()} list={orders[key]} />
 						]})}
 					</List>
+				)}
+					
 				</Content>
 			</Container>
 		)
@@ -66,14 +71,13 @@ OrderHistoryScreen.navigationOptions = {
 
 function ShowListFromDate(props){
 	var arr = props.list;
-	var newArr = [...arr];
 	return (
-		newArr.map((order,i)=>(
-			<ListItem first={i == 0} last={i == newArr.length - 1} key={i} style={{alignItems: "flex-start", justifyContent: "flex-start"}}>
+		arr.map((order,i)=>(
+			<ListItem last={i == arr.length - 1} key={i} style={{alignItems: "flex-start", justifyContent: "flex-start"}}>
 				<Left style={{flex:1, flexDirection: "column",alignItems: "flex-start",justifyContent:"flex-start"}}>
 					<Title style={{color: "#334"}}>#{order.orderID}</Title>
 					<Text note numberOfLines={1} style={{justifyContent: "flex-start", alignSelf: "flex-start", textAlign: "left"}}>{order.delivery.destination}</Text>
-					<View note style={{marginTop: 5, flexDirection: "row", justifyContent: "flex-start",alignItems: "flex-start"}}><Icon name={order.status.result == 1 ? "check-circle" : "x-circle"} type="Feather" style={{color:order.status.result == 1 ? "seagreen" : "crimson"}} /><Text note> {order.status['result-text']}</Text></View>
+					<View note style={{marginTop: 5, flexDirection: "row", justifyContent: "flex-start",alignItems: "flex-start"}}><Icon name={undefined != order.status && order.status.result == 1 ? "check-circle" : "x-circle"} type="Feather" style={{color:undefined != order.status && order.status.result == 1 ? "seagreen" : "crimson"}} /><Text note> {undefined != order.status ? order.status['result-text'] : "Canceled"}</Text></View>
 				</Left>
 				<Right style={{flex: 1,flexDirection: "column"}}>
 					<Text>GHC {order.payment.amount}</Text>

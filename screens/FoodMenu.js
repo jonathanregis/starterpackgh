@@ -90,7 +90,7 @@ class FoodMenu extends React.Component {
     return (
     <Container style={{backgroundColor: "#334"}}>
 
-      <Header style={{backgroundColor: '#334', elevation: 0, marginTop: Constants.statusBarHeight}} noShadow searchBar rounded>
+      <Header style={{backgroundColor: '#334', elevation: 0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder noShadow searchBar rounded>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true}/>
         <Left style={!this.state.searchActive ? {flex: 1} : null}>
           <Button transparent onPress={this.state.searchActive ? ()=>this.setState({searchActive: false, searchTerm: ""}) : ()=>this.props.navigation.goBack() }>

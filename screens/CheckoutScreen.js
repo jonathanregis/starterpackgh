@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Constants from 'expo-constants';
-import { WebView, ActivityIndicator } from 'react-native';
-import {StatusBar, StyleSheet, View, TouchableOpacity, Platform, BackHandler, Modal} from 'react-native';
+import {StatusBar, StyleSheet, View, TouchableOpacity, Platform, BackHandler, Modal, ActivityIndicator} from 'react-native';
 import { Container, ActionSheet, Thumbnail, List, ListItem, Form, Item, Label, Input, Textarea, Content, Title, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Text, Footer, Left, Body, Right, Button, Spinner } from 'native-base';
 import Colors from '../constants/Colors';
 import {Feather} from '@expo/vector-icons';
@@ -11,7 +10,8 @@ import {RadioButton} from '../components/Addons';
 import {CASH_ON_DELIVERY, DEBIT_CARD, API_URL} from '../constants/Redux';
 import {connect} from 'react-redux';
 import store from '../store';
-import {withNavigationFocus} from 'react-navigation'
+import {withNavigationFocus} from 'react-navigation';
+import {WebView} from 'react-native-webview';
 
 const toggle = prop => {
   if(prop) return false;
@@ -95,6 +95,7 @@ class CheckoutScreen extends Component {
     }
 
     else {
+      this.setState({payButton: false});
       let preppedObject = {
         buyerID: this.props.user.id,
         cart: this.props.cartItems,
@@ -120,8 +121,9 @@ class CheckoutScreen extends Component {
       })
       .then(response=>response.json())
       .then(res=>{
+        console.log(res.payment.checkoutUrl);
         if(res.success) this.setState({orderNumber:res.payment['order-id'],checkoutURL: res.payment.checkoutUrl},this.setState({modalVisible: true}));
-        else alert("Delivery failed, please try again");
+        else alert("Request failed, please try again");
       })
     }
   }
@@ -151,7 +153,7 @@ class CheckoutScreen extends Component {
   render() {
     return (
       <Container style={{backgroundColor: "#334"}}>
-       <Header style={{backgroundColor: '#334', elevation: 0, marginTop: Constants.statusBarHeight}} noShadow hasTabs>
+       <Header style={{backgroundColor: '#334', elevation: 0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder noShadow hasTabs>
           <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true}/>
           <Left style={{flex:1}}>
             <Title style={{color: "#fff"}}>GHC {this.props.total}</Title>
@@ -191,6 +193,16 @@ class CheckoutScreen extends Component {
 				  	startInLoadingState={true} 
 				  	style={styles.modalContent} 
 				  	source={{ uri: this.state.checkoutURL }} />
+            <View style={{backgroundColor: "#fff", padding: 10}}>
+              <Button onPress={()=>{this.setModalVisible(false);
+                      this.props.navigation.navigate("Home");
+                      this.setState({payButton: false});
+                      store.dispatch({type: "CLEAR_CART"})
+                    }} 
+                    style={{backgroundColor: Colors.tintColor, borderRadius: 30}}>
+                <Text> CLOSE </Text>
+              </Button>
+            </View>
               </View>
             </Modal>
         <Content enableOnAndroid style={{backgroundColor: "#fff"}}>
