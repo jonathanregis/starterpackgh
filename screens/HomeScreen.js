@@ -200,8 +200,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     padding: 0,
     zIndex: 1,
-    flex: 1,
-    maxWidth: 700
+    flex: 1
   },
   saluteSection: {
     padding: 30,
