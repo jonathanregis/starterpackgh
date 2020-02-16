@@ -121,7 +121,6 @@ class CheckoutScreen extends Component {
       })
       .then(response=>response.json())
       .then(res=>{
-        console.log(res.payment.checkoutUrl);
         if(res.success) this.setState({orderNumber:res.payment['order-id'],checkoutURL: res.payment.checkoutUrl},this.setState({modalVisible: true}));
         else alert("Request failed, please try again");
       })
@@ -180,6 +179,25 @@ class CheckoutScreen extends Component {
               containerStyle={styles.modal}
               >
               <View style={styles.modal}>
+                <Header style={{backgroundColor: '#334', elevation: 0, borderBottomWidth: 0}} noBorder noShadow hasTabs>
+                  <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true}/>
+                  <Left style={{flex:1}}>
+                    <Button transparent onPress={()=>{this.setModalVisible(false);
+                      this.props.navigation.navigate("Home");
+                      this.setState({payButton: false});
+                      store.dispatch({type: "CLEAR_CART"})
+                      }}>
+                      <Feather name="x-circle" size={30} color="#fff" />
+                      <Text>Cancel</Text>
+                    </Button>
+                  </Left>
+                  <Body style={{flex:1,alignItems: "center", justifyContent: "center"}}>
+                    <Title>Order {this.state.orderNumber.split("/")[0]}</Title>
+                  </Body>
+                  <Right style={{flex:1}}>
+                    <Title style={{color: "#fff"}}>GHC {this.props.total}</Title>
+                  </Right>
+                </Header>
                 <WebView 
                 	onMessage={event => {
 					    const { data } = event.nativeEvent;
@@ -193,16 +211,7 @@ class CheckoutScreen extends Component {
 				  	startInLoadingState={true} 
 				  	style={styles.modalContent} 
 				  	source={{ uri: this.state.checkoutURL }} />
-            <View style={{backgroundColor: "#fff", padding: 10}}>
-              <Button onPress={()=>{this.setModalVisible(false);
-                      this.props.navigation.navigate("Home");
-                      this.setState({payButton: false});
-                      store.dispatch({type: "CLEAR_CART"})
-                    }} 
-                    style={{backgroundColor: Colors.tintColor, borderRadius: 30}}>
-                <Text> CLOSE </Text>
-              </Button>
-            </View>
+            
               </View>
             </Modal>
         <Content enableOnAndroid style={{backgroundColor: "#fff"}}>

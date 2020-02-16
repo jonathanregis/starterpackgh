@@ -58,7 +58,7 @@ import {API_URL} from '../constants/Redux';
 
   render(){
     if(this.props.isFocused){
-      StatusBar.setBarStyle(Platform.OS !== "ios" ? "light-content":"dark-content")
+      StatusBar.setBarStyle("light-content")
       StatusBar.setBackgroundColor(this.state.headerBgColor)
     }
     return (
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     position: 'absolute',
-    height: 210,
+    height: 180,
     width: '100%',
     display: 'flex',
     alignItems: 'center',
