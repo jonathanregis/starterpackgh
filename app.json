@@ -6,11 +6,10 @@
     "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "primaryColor": "#ffffff",
-    "version": "1.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -27,7 +26,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.starterpackgh.order",
-      "buildNumber": "10"
+      "buildNumber": "11"
     },
     "androidNavigationBar": {
      
@@ -39,7 +38,7 @@
     },
     "android": {
       "package": "com.starterpack.order",
-      "versionCode": 10
+      "versionCode": 11
     },
     "androidStatusBar": {
     "barStyle": "light-content",
