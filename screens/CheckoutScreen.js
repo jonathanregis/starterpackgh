@@ -219,6 +219,10 @@ class CheckoutScreen extends Component {
           <Tab style={{backgroundColor: "transparent"}} disabled={false} textStyle={{color: "#fff"}} activeTabStyle={{margin: 10,borderColor: "#fff", borderWidth: 1, backgroundColor: "transparent", borderRadius: 30}} activeTextStyle={{color: "#fff", fontWeight: 'bold'}} tabStyle={{backgroundColor: "transparent", borderWidth: 1, borderColor: "transparent", elevation: 0, borderRadius: 30, margin:10}} heading="Delivery">
             <View style={{backgroundColor: "#334"}} >
               <View style={{ padding: 15, backgroundColor: "#fff", borderTopRightRadius: 30, borderTopLeftRadius: 30, flex: 1}}>
+                <View style={styles.errorBox}>
+                  <Icon name="info" type="Feather"/>
+                  <Text style={{fontFamily: "Roboto_medium", justifyContent: "center", marginLeft: 10}}>Delivery ends at 11 AM</Text>
+                </View>
                 <View style={styles.sectionTitleWithLink}>
                   <Text style={styles.sectionTitle}>CUSTOMER INFO</Text>
                   <TouchableOpacity onPress={()=>this.setState({editMode: toggle(this.state.editMode)})}>
@@ -358,6 +362,14 @@ const styles = StyleSheet.create({
   activityIndicator: {
   	flex: 1,
   	alignSelf: "center"
+  },
+  errorBox: {
+    backgroundColor: "#5bc0de33",
+    padding: 15,
+    marginVertical: 10,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
   }
 })
 
