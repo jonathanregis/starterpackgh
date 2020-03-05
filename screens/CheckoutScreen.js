@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Constants from 'expo-constants';
 import {StatusBar, StyleSheet, View, TouchableOpacity, Platform, BackHandler, Modal, ActivityIndicator} from 'react-native';
-import { Container, ActionSheet, Thumbnail, List, ListItem, Form, Item, Label, Input, Textarea, Content, Title, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Text, Footer, Left, Body, Right, Button, Spinner } from 'native-base';
+import { Container, ActionSheet, Thumbnail, List, ListItem, Form, Item, Label, Input, Textarea, Content, Title, Header, Tab, Tabs, ScrollableTab, TabHeading, Icon, Text, Footer, Left, Body, Right, Button, Spinner, Picker } from 'native-base';
 import Colors from '../constants/Colors';
 import {Feather} from '@expo/vector-icons';
 import * as Location from 'expo-location';
@@ -29,7 +29,6 @@ class CheckoutScreen extends Component {
       errorMessage: "",
       location: {},
       address: this.props.user.address,
-      editMode: false,
       paymentMethod: "CARD",
       selectedCard: 0,
       modalVisible: false,
@@ -39,7 +38,10 @@ class CheckoutScreen extends Component {
       note: "",
       orderNumber: "",
       checkoutURL: "",
-      spin: false
+      spin: false,
+      form: "delivery",
+      locations: [],
+      selectedLocation: "",
     };
   }
 
@@ -57,6 +59,7 @@ class CheckoutScreen extends Component {
     } else {
       this._getLocationAsync();
     }
+    this.makeList("delivery");
   }
 
   componentWillUnmount() {
@@ -100,6 +103,7 @@ class CheckoutScreen extends Component {
         buyerID: this.props.user.id,
         cart: this.props.cartItems,
         delivery: {
+          isDelivery: this.state.form == "delivery",
           destination: this.state.address,
           contactName: this.state.contactName,
           contactNumber: this.state.contactNumber,
@@ -109,8 +113,16 @@ class CheckoutScreen extends Component {
           method: this.state.paymentMethod,
           amount: this.props.total
         },
-        redirectURL: "https://starterpackgh.netlify.com/paid/"
+        redirectURL: "https://www.use.starterpackgh.com/paid/"
       }
+      if(this.state.form == "pickup"){
+        preppedObject.delivery.pickup = this.state.selectedLocation
+      }
+
+      if(this.state.form == "delivery"){
+        preppedObject.delivery.closeLocation = this.state.selectedLocation
+      }
+
       fetch(API_URL+"/pay/",{
         method: "POST",
         headers: {
@@ -121,6 +133,7 @@ class CheckoutScreen extends Component {
       })
       .then(response=>response.json())
       .then(res=>{
+        console.log(res)
         if(res.success) this.setState({orderNumber:res.payment['order-id'],checkoutURL: res.payment.checkoutUrl},this.setState({modalVisible: true}));
         else alert("Request failed, please try again");
       })
@@ -149,6 +162,20 @@ class CheckoutScreen extends Component {
 	);
 	}
 
+  onValueChange = (val) => {
+    this.setState({selectedLocation: val})
+  }
+
+  makeList = type => {
+    this.setState({form: type});
+    let endpoint = type === "pickup" ? "/pickups/" : "/delivery/";
+    fetch(API_URL + endpoint)
+      .then(response=>response.json())
+      .then(response=>{
+        this.setState({locations: type == "pickup" ? response.pickup : response.locations},()=>{setTimeout(()=>this.setState({selectedLocation: this.state.locations[0]._id}),500)})
+      })
+  }
+
   render() {
     return (
       <Container style={{backgroundColor: "#334"}}>
@@ -158,7 +185,7 @@ class CheckoutScreen extends Component {
             <Title style={{color: "#fff"}}>GHC {this.props.total}</Title>
           </Left>
           <Body style={{flex:1,alignItems: "center", justifyContent: "center"}}>
-            <Title>Checkout</Title>
+            <Title style={{color: "#fff"}}>Checkout</Title>
           </Body>
           <Right style={{flex:1}}>
             <Button transparent onPress={()=>this.props.navigation.navigate("Cart")}>
@@ -192,7 +219,7 @@ class CheckoutScreen extends Component {
                     </Button>
                   </Left>
                   <Body style={{flex:1,alignItems: "center", justifyContent: "center"}}>
-                    <Title>Order {this.state.orderNumber.split("/")[0]}</Title>
+                    <Title style={{color: "#fff"}}>Order {this.state.orderNumber.split("/")[0]}</Title>
                   </Body>
                   <Right style={{flex:1}}>
                     <Title style={{color: "#fff"}}>GHC {this.props.total}</Title>
@@ -221,31 +248,65 @@ class CheckoutScreen extends Component {
               <View style={{ padding: 15, backgroundColor: "#fff", borderTopRightRadius: 30, borderTopLeftRadius: 30, flex: 1}}>
                 <View style={styles.errorBox}>
                   <Icon name="info" type="Feather"/>
-                  <Text style={{fontFamily: "Roboto_medium", justifyContent: "center", marginLeft: 10}}>Delivery ends at 11 AM</Text>
+                  <View>
+                    <Text style={{fontWeight: "bold", justifyContent: "center", marginLeft: 10}}>Service ends at 11 AM</Text>
+                    <Text style={{justifyContent: "center", marginLeft: 10}} note>Any order made after 11 AM will be ready the next day. Please note that we are closed on weekends.</Text>
+                  </View>
+                  
                 </View>
-                <View style={styles.sectionTitleWithLink}>
-                  <Text style={styles.sectionTitle}>CUSTOMER INFO</Text>
-                  <TouchableOpacity onPress={()=>this.setState({editMode: toggle(this.state.editMode)})}>
-                    <Text style={{color: Colors.tintColor}}>{this.state.editMode ? "SAVE" : "EDIT"}</Text>
-                  </TouchableOpacity>
+                <Text style={[styles.sectionTitle,{marginTop: 15}]}>ORDER TYPE</Text>
+                <View style={styles.selectGroup}>
+                  <Button onPress={()=>this.makeList("delivery")} transparent icon style={this.state.form === "delivery" ? [styles.selectButton,styles.selectButtonActive] : styles.selectButton}><Icon name="truck" type="Feather" style={{color: this.state.form === "delivery" ? "#fff" : Colors.tintColor}}/><Text style={{color: this.state.form === "delivery" ? "#fff" : Colors.tintColor}}>Delivery</Text></Button>
+                  <Button onPress={()=>this.makeList("pickup")} transparent icon style={this.state.form === "pickup" ? [styles.selectButton,styles.selectButtonActive] : styles.selectButton}><Icon name="store" type="MaterialCommunityIcons" style={{color: this.state.form === "pickup" ? "#fff" : Colors.tintColor}}/><Text style={{color: this.state.form === "pickup" ? "#fff" : Colors.tintColor}}>Pickup</Text></Button>
                 </View>
+                {this.state.form === "pickup" && (
+                  <View style={{marginVertical: 15}}>
+                    <Text note>Pickup from a vendor close to you. Please select where you would like to pickup your order</Text>
+                    <Form style={{marginVertical: 15,borderColor: "#dedeea",borderWidth: 2, padding: 5, borderRadius: 30}}>
+                    <Picker
+                      iosHeader="Location"
+                      Header="Location"
+                      textStyle={{color: "#334"}}
+                      mode="dropdown"
+                      iosIcon={<Icon name="arrow-down" />}
+                      style={{ width: "100%"}}
+                      selectedValue={this.state.selectedLocation}
+                      onValueChange={this.onValueChange.bind(this)}
+                      itemStyle={{width: '100%'}}
+                    >
+                      {this.state.locations.map((item,index)=>{return (
+                        <Picker.Item key={index} label={item.location} value={item._id} />
+                      )})
+                    }
+                    </Picker>
+                    </Form>
+                  </View>
+                )}
+
+                {this.state.form === "delivery" && (
+                  <View style={{marginVertical: 15}}>
+                    <Text note>Your order will be delivered to the address you provided in the address field below.</Text>
+                  </View>
+                )}
+                <Text style={styles.sectionTitle}>CUSTOMER INFO</Text>
                 <Form style={{marginTop: 0}} noIndent>
                   <Item style={styles.formItem} fixedLabel first>
                     <Label>Name</Label>
-                    <Input disabled={!this.state.editMode} onChangeText={t=>this.setState({contactName: t})} defaultValue={this.props.user.name} placeholder="Customer name" />
+                    <Input onChangeText={t=>this.setState({contactName: t})} defaultValue={this.props.user.name} placeholder="Customer name" />
                   </Item>
                   <Item style={styles.formItem} fixedLabel>
                     <Label>Phone</Label>
-                    <Input disabled={true} defaultValue={this.props.user.phone} keyboardType="phone-pad" />
+                    <Input defaultValue={this.props.user.phone} keyboardType="phone-pad" />
                   </Item>
                   <Item style={styles.formItem} fixedLabel icon>
                     <Label>Address</Label>
-                    <Input disabled={!this.state.editMode} onChangeText={t=>this.setState({address: t})} multiline defaultValue={this.state.address} />
+                    <Input onChangeText={t=>this.setState({address: t})} multiline defaultValue={this.state.address} />
                     <TouchableOpacity onPress={()=>{this.setState({useGps: true});this._getLocationAsync()}}>
                       <Icon type="Feather" name="map-pin" />
                     </TouchableOpacity>
                   </Item>
                 </Form>
+                
                 <Text style={[styles.sectionTitle,{marginTop: 15}]}>DELIVERY NOTES</Text>
                 <Form style={{marginTop: 10}}>
                     <Textarea onChangeText={t=>this.setState({note: t})} rowSpan={5} style={{borderColor: "#dedeea", borderWidth: 1, borderRadius: 30, padding: 10}} placeholder="Allergies, special notes etc..."></Textarea>
@@ -276,6 +337,7 @@ class CheckoutScreen extends Component {
                   )
                 })}
                 </List>
+                <Text note style={{marginVertical: 15}}>{this.state.form == "pickup" ? "Pickup from vendor" : "Deliver to "+ this.state.contactName +"\nat "+ this.state.address}</Text>
                 <View style={styles.sectionTitleWithLink}>
                   <Text style={styles.sectionTitle}>TOTAL</Text>
                   <View>
@@ -291,14 +353,13 @@ class CheckoutScreen extends Component {
           <Left />
           <Body />
           <Right>
-            <Button onPress={this.buttonAction} icon style={{backgroundColor: this.state.payButton ? "seagreen" : Colors.tintColor, borderRadius: 30, elevation: 10}}><Text>{this.state.payButton ? "PAY" : "NEXT"}</Text><Icon name={this.state.payButton ? "ios-checkmark-circle" : "ios-arrow-dropright-circle"}></Icon></Button>
+            <Button onPress={this.buttonAction} icon style={{backgroundColor: this.state.payButton ? "seagreen" : Colors.tintColor, borderRadius: 30, elevation: 10}}><Text>{this.state.payButton ? "PAY" : "NEXT"}</Text><Icon style={{color: "#fff"}} name={this.state.payButton ? "ios-checkmark-circle" : "ios-arrow-dropright-circle"}></Icon></Button>
           </Right>
         </Footer>
       </Container>
     );
   }
 }
-
 
 
 CheckoutScreen.navigationOptions = {
@@ -370,6 +431,21 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
+    borderRadius: 30
+  },
+  selectGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start"
+  },
+  selectButton:{
+    borderRadius: 30,
+    borderColor: Colors.tintColor,
+    borderWidth: 1,
+    marginRight: 10
+  },
+  selectButtonActive: {
+    backgroundColor: Colors.tintColor
   }
 })
 

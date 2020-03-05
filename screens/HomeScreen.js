@@ -9,6 +9,8 @@ import {
   View,
   StatusBar,
   Dimensions,
+  Easing,
+  Animated
 } from 'react-native';
 
 import {Header,Container, Body, Content, Left, Right, Title, Button, Text, Item, Input, Icon, Drawer} from 'native-base';
@@ -22,27 +24,58 @@ import StarterPackMenu from '../components/StarterPackMenu';
 import SideBar from '../components/SideBar';
 import { withNavigationFocus } from 'react-navigation';
 import store from '../store';
+import {updateMenu} from '../actions/OrderActions';
 import {API_URL} from '../constants/Redux';
+import {Root, Popup} from 'popup-ui';
+import {connect} from 'react-redux';
+import moment from 'moment';
 
 
  class HomeScreen extends React.Component {
 
     constructor(props){
       super(props);
-      this.state = {entries: [],
+      this.state = {
         searchActive: false,
         menuEntries: [],
         searchTerm: "",
-        headerBgColor: "transparent"
+        headerBgColor: "transparent",
+        isLeftSide: false
       }
+      this.animatedValue = new Animated.Value(1);
     }
 
     componentDidMount(){
       fetch(API_URL +"/meals/")
       .then(response=>response.json())
       .then(response=>{
-        this.setState({menuEntries: response.meals, entries: response.meals.slice(0,3)})
+        this.setState({menuEntries: response.meals})
+        this.props.updateMenu(response.meals);
       })
+      fetch("https://worldtimeapi.org/api/timezone/africa/accra")
+      .then(response => response.json())
+      .then(res => {
+        let currentTime = moment(res.datetime);
+        let prepareCloseTime = moment(res.datetime);
+        prepareCloseTime.set("hour",11);
+        prepareCloseTime.set("minute",1);
+        let closeTime = prepareCloseTime;
+        let isClosed = currentTime.isAfter(closeTime);
+
+        if(res.day_of_week == 0 || res.day_of_week == 6 || isClosed){
+          Popup.show({
+            type: 'Warning',
+            title: 'We\'re closed at this time',
+            button: true,
+            textBody: 'Please note that our service ends at 11 AM. All orders made after 11 AM will be considered for the next day.\n𝙒𝙚 𝙖𝙧𝙚 𝙖𝙡𝙨𝙤 𝙘𝙡𝙤𝙨𝙚𝙙 𝙤𝙣 𝙬𝙚𝙚𝙠𝙚𝙣𝙙𝙨.',
+            buttontext: 'Continue',
+            callback: () => Popup.hide()
+          })
+        }
+      })
+
+      setTimeout(this.fire,2000)
+      
     }
 
     isCloseToTop = ({ layoutMeasurement, contentOffset, contentSize }) => {
@@ -55,14 +88,57 @@ import {API_URL} from '../constants/Redux';
 
     openDrawer = () => { this.drawer._root.open() };
 
+    animate () {
+      this.animatedValue.setValue(1);
+      Animated.timing(
+        this.animatedValue,
+        {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.linear
+        }
+      ).start()
+    }
+
+    finishedAnimation = (finished) => {
+    if (finished)
+      this.setState({isLeftSide: !(this.state.isLeftSide)});
+  }
+
+  fire = () => { 
+     this.animatedValue.setValue(1);
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.linear
+      }
+    ).start(this.finishedAnimation);
+  }
+
+    direction = () => this.state.isLeftSide ? 'ltr' : 'rtl';
 
   render(){
     if(this.props.isFocused){
       StatusBar.setBarStyle("light-content")
       StatusBar.setBackgroundColor(this.state.headerBgColor)
     }
+    const screenWidth = Dimensions.get('screen').width;
+    const objectMaxCoord = screenWidth - 30;
+
+    const outputRange = {
+      rtl: [0, objectMaxCoord],
+      ltr: [objectMaxCoord, 0]
+    }
+    const marginLeft = this.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: outputRange[this.direction()]
+    })
     return (
+    <Root>
     <Drawer ref={(ref) => { this.drawer = ref; }} content={<SideBar drawerItem={this.drawer} navigation={this.props.navigation} />} onClose={() => this.closeDrawer()} >
+    
     <Container>
     {this.state.searchActive && (
       <Header noShadow style={{backgroundColor: this.state.headerBgColor, zIndex: 1000, elevation:0, borderBottomWidth: 0, marginTop: Platform.OS !== "ios" ? Constants.statusBarHeight : 0}} noBorder searchBar rounded>
@@ -103,6 +179,7 @@ import {API_URL} from '../constants/Redux';
       </Header>
     )}
 
+    
     <View style={styles.container}>
     
     <View style={styles.headerSection}>
@@ -121,7 +198,7 @@ import {API_URL} from '../constants/Redux';
             }
           }} >
       <View style={styles.saluteSection}>
-        <Text style={{color: Colors.tintColor, fontSize: 18, fontWeight: 'bold'}}>Welcome, {store.getState().auth.user.name}</Text>
+        <Animated.Text numberOfLines={1} style={{marginLeft,color: Colors.tintColor, width: '100%', fontSize: 18, fontWeight: 'bold'}}>Hello, {store.getState().auth.user.name}</Animated.Text>
       </View>
       
       <View
@@ -131,24 +208,27 @@ import {API_URL} from '../constants/Redux';
 
           <Text style={styles.sectionTitle}>MAKE YOUR BREAKFAST</Text>
           <Text note>You can make your own breakfast pack by choosing different items provided.</Text>
-          <Button onPress={()=>this.props.navigation.navigate("Builder")} style={{backgroundColor: Colors.tintColor,borderRadius: 30, marginTop: 20}}>
-            <Text>Make your breakfast</Text>
+          <Button icon onPress={()=>this.props.navigation.navigate("Builder")} style={{backgroundColor: Colors.tintColor,borderRadius: 30, marginTop: 20}}>
+            <Text>Make Your Breakfast</Text>
+            <Icon name="ios-arrow-dropright-circle" style={{color: "#fff"}} />
           </Button>
 
-          <View style={styles.sectionTitleWithLink}>
-            <Text style={styles.sectionTitle}>FULLY LOADED MENU</Text>
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate("Menu")}>
-              <Text style={{color: Colors.tintColor}}>VIEW ALL <Feather size={15} name="chevron-right" color={Colors.tintColor} /></Text>
-            </TouchableOpacity>
-          </View>
-          <StarterPackMenu navigation={this.props.navigation} entries={this.state.menuEntries} limit={5} />
+          <Text style={[styles.sectionTitle,{marginTop: 20}]}>FULLY LOADED MENU</Text>
+          <Text note>Comes with Bread Rolls, another pastry, Sugar, Milk, Fruits, Boiled Egg, with Ground Pepper, Cutlery.</Text>
+          <Button onPress={()=>this.props.navigation.navigate("Menu")} style={{backgroundColor: Colors.tintColor,borderRadius: 30, marginTop: 20}}>
+            <Text>Fully Loaded Menu</Text>
+            <Icon name="ios-arrow-dropright-circle" style={{color: "#fff"}} />
+          </Button>
 
         </View>
       </View>
     </Content>
     </View>
+
     </Container>
+    
     </Drawer>
+    </Root>
   );
   }
 
@@ -233,4 +313,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigationFocus(HomeScreen);
+const mapActionToProps = {
+  updateMenu
+}
+
+const mapStateToProps = state => {
+  return {
+    menuItemsCached: state.order.menuItems
+  }
+}
+
+export default connect(mapStateToProps,mapActionToProps)(withNavigationFocus(HomeScreen));

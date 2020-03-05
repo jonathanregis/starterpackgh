@@ -32,19 +32,12 @@ class FoodMenu extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        menuItems: [],
+        menuItems: this.props.menuItemsCached,
         searchActive: this.props.navigation.getParam("term","") == "" ? false : true,
         searchTerm: this.props.navigation.getParam("term",""),
       }
     }
 
-    componentDidMount(){
-      fetch(API_URL +"/meals/")
-      .then(response=>response.json())
-      .then(response=>{
-        this.setState({menuItems: response.meals})
-      })
-    }
 
     closeDrawer = () => {
       this.drawer._root.close()
@@ -57,8 +50,8 @@ class FoodMenu extends React.Component {
     
 
     search = (keyword) => {
-        var search_fields = ['description'];
-        var data = this.state.menuItems
+        var search_fields = ['name'];
+        var data = this.props.menuItemsCached
 
         if(keyword.length<1) // skip if input is empty
             return
@@ -223,7 +216,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     cartItems: state.order.cartItems,
-    total: state.order.cartTotal
+    total: state.order.cartTotal,
+    menuItemsCached: state.order.menuItems
   }
 }
 

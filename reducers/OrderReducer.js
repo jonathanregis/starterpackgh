@@ -3,7 +3,8 @@ import {
 	REMOVE_CART,
 	UPDATE_ITEM_QUANTITY,
 	CLEAR_CART,
-	REMOVE_ADDON
+	REMOVE_ADDON,
+	RECEIVED_MENU
 } from '../constants/Redux';
 
 import update from 'immutability-helper';
@@ -13,7 +14,8 @@ const initialState = {
 	cartTotal: 0,
 	currentOrder: null,
 	orderStatus: null,
-	debitCards: [{number: "4807775698233290", expiry: "1020", name: "Jane Doe", cvv: "764", type: "mastercard"},{number: "4807775698232991", expiry: "0922", name: "Jonathan Regis", cvv: "451", type: "visa"}],
+	debitCards: [],
+	menuItems: []
 }
 
 export default function(state = initialState, action){
@@ -60,6 +62,11 @@ export default function(state = initialState, action){
 			return update(state, {
 				debitCards: {$push: [{number: "4807775698233290", expiry: "1020", name: "Jane Doe", cvv: "764", type: "mastercard"}]}
 			});
+
+		case RECEIVED_MENU:
+			return update(state, {
+				menuItems: {$set: action.payload}
+			})
 
 		default:
 			return state;

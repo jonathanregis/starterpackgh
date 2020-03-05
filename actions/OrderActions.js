@@ -2,7 +2,8 @@ import {
 	ADD_CART,
 	REMOVE_CART,
 	UPDATE_ITEM_QUANTITY,
-	REMOVE_ADDON
+	REMOVE_ADDON,
+	RECEIVED_MENU
 } from '../constants/Redux';
 
 export function add_to_cart(item,quantity,addons){
@@ -32,6 +33,15 @@ export function updateQuantity(index,quantity){
 		dispatch({
 			type: UPDATE_ITEM_QUANTITY,
 			payload: {quantity: quantity, index: index}
+		})
+	}
+}
+
+export function updateMenu(menu){
+	return dispatch => {
+		dispatch({
+			type: RECEIVED_MENU,
+			payload: menu
 		})
 	}
 }

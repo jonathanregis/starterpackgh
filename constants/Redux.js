@@ -13,3 +13,4 @@ export const DEBIT_CARD = "debit_card";
 export const USER_DATA_UPDATE = "USER_DATA_UPDATE";
 export const API_URL = "https://api.starterpackgh.com/api";
 export const REGISTRATION_FAILED = "REGISTRATION_FAILED";
+export const RECEIVED_MENU = "RECEIVED_MENU";
