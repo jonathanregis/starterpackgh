@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Starter Pack",
+    "name": "Starter Pack Breakfast",
     "slug": "starterpack",
     "privacy": "public",
     "sdkVersion": "35.0.0",
@@ -37,7 +37,7 @@
     "backgroundColor": "#ffffff"
     },
     "android": {
-      "package": "com.starterpack.order",
+      "package": "com.starterpackgh.order",
       "versionCode": 11
     },
     "androidStatusBar": {
