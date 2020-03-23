@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Starter Pack Breakfast",
+    "name": "Starterpack Breakfast",
     "slug": "starterpack",
     "privacy": "public",
     "sdkVersion": "35.0.0",
@@ -9,7 +9,7 @@
       "android"
     ],
     "primaryColor": "#ffffff",
-    "version": "1.0.2",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -26,7 +26,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.starterpackgh.order",
-      "buildNumber": "11"
+      "buildNumber": "13",
+      "infoPlist": {
+	    "NSLocationWhenInUseUsageDescription": "Starterpack Breakfast needs to access your location to automatically set the delivery address."
+	  }
     },
     "androidNavigationBar": {
      
@@ -38,7 +41,7 @@
     },
     "android": {
       "package": "com.starterpackgh.order",
-      "versionCode": 11
+      "versionCode": 13
     },
     "androidStatusBar": {
     "barStyle": "light-content",

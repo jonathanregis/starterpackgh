@@ -112,7 +112,7 @@ class SideBar extends React.Component{
 								<Feather name="chevron-right" color={Colors.tintColor} size={21} />
 							</Right>
 						</ListItem>
-						<ListItem icon>
+						<ListItem icon onPress={()=>this.props.navigation.navigate("Help")}>
 							<Left>
 								<Feather name="help-circle" color={Colors.tintColor} size={21} />
 							</Left>

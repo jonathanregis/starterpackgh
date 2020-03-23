@@ -286,6 +286,7 @@ class CheckoutScreen extends Component {
                 {this.state.form === "delivery" && (
                   <View style={{marginVertical: 15}}>
                     <Text note>Your order will be delivered to the address you provided in the address field below.</Text>
+                    <Text>* Please note that this attracts a delivery fee.</Text>
                   </View>
                 )}
                 <Text style={styles.sectionTitle}>CUSTOMER INFO</Text>

@@ -13,6 +13,7 @@ import FoodMenu from '../screens/FoodMenu';
 import store from '../store';
 import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import FoodBuilder from '../screens/Builder';
+import HelpScreen from '../screens/HelpScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -26,6 +27,7 @@ const HomeStack = createStackNavigator(
     Menu: FoodMenu,
     History: OrderHistoryScreen,
     Builder: FoodBuilder,
+    Help: HelpScreen
   },
   config
 );
